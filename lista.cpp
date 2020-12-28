@@ -63,4 +63,11 @@ Lista<Tip>& Lista<Tip>::operator=(Lista<Tip> &&rhs) {
   return *this;
 }
 
+template <typename tip>
+Lista<tip>& operator+(Lista<tip> &l1, const Lista<tip> &l2) {
+    for(auto it(l2.Begin()); it != l2.End(); it++)
+        l1.Push_Back(*it);
+    return l1;
+}
+
 #endif // LISTA_CPP
