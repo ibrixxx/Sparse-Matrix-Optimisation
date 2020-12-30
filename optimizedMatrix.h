@@ -82,6 +82,20 @@ class Matrix {
         }
     }
     void ispisi() {
+        /*std::pair<int,int> sp = std::make_pair(10,10);
+        Lista<std::pair<int,int>> s;
+        s.Push_Back(sp);
+        Lista<std::pair<int,int>>::Iterator it;
+        it = s.Begin();
+        std::cout<<(*it).first;*/
+        typename matrix<Tip>::Iterator it;
+        for(it = mat.Begin(); it != mat.End(); it++){
+            std::cout<<(*it).first<<',';
+            for(auto jt = (*it).second.Begin(); jt != (*it).second.End(); jt++){
+                std::cout<<(*jt).first<<'-'<<(*jt).second;
+            }
+            std::cout<<std::endl;
+        }
 
     }
 };
