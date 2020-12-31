@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 #include <stack>
+#include <algorithm>
+//#include <initializer_list>
 //using namespace std;
 
 
@@ -36,7 +38,7 @@ class Matrix {
     //nego samo u pomocne varijable broj_redova i broj_kolona
     Matrix(int redovi, int kolone): broj_redova(redovi), broj_kolona(kolone) {}
 
-    Matrix(int redovi, int kolone, vektor<Tip> &elementi): broj_redova(redovi), broj_kolona(kolone) {
+    Matrix(int redovi, int kolone, vektor<Tip> elementi): broj_redova(redovi), broj_kolona(kolone) {
 
         sort(elementi.begin(), elementi.end(), [](podaci<Tip> a, podaci<Tip> b) {return a.first.first < b.first.first;});
 
@@ -56,20 +58,24 @@ class Matrix {
         indeksi_redova.push(clan.first);
 
         it1++;
+        bool isti(false);
         for(auto i(it1); i!=elementi.end(); i++){
 
-            auto koordinate = i->first;
-            int pomRed = koordinate.first;
+            auto koordinate2 = i->first;
+            int pomRed = koordinate2.first;
             auto vrijednost = i->second;
 
             std::pair<int, Tip> unos2;
-            unos2.first = koordinate.second;
+            unos2.first = koordinate2.second;
             unos2.second = vrijednost;
 
             if(pomRed != indeksi_redova.top()){
-                mat.Push_Back(clan);
-                clan.second.Clear();
-                clan.first = pomRed;
+                if(isti){
+                    mat.Push_Back(clan);
+                    clan.second.Clear();
+                    clan.first = pomRed;
+                    isti = false;
+                }
                 std::pair<int, Lista<std::pair<int,Tip>>> clan2;
                 clan2.first = pomRed;
                 clan2.second.Push_Back(unos2);
@@ -78,6 +84,7 @@ class Matrix {
             }
             else{
                 clan.second.Push_Back(unos2);
+                isti = true;
             }
         }
     }
@@ -92,7 +99,7 @@ class Matrix {
         for(it = mat.Begin(); it != mat.End(); it++){
             std::cout<<(*it).first<<',';
             for(auto jt = (*it).second.Begin(); jt != (*it).second.End(); jt++){
-                std::cout<<(*jt).first<<'-'<<(*jt).second;
+                std::cout<<(*jt).first<<'-'<<(*jt).second<<' ';
             }
             std::cout<<std::endl;
         }
