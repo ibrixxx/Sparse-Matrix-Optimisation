@@ -1,11 +1,11 @@
-#ifndef OPTIMIZEDMATRIX.H
-#define OPTIMIZEDMATRIX.H
+#ifndef OPTIMIZEDMATRIX_H
+#define OPTIMIZEDMATRIX_H
+
 #include "lista.h"
 #include <utility>
 #include <vector>
 #include <algorithm>
 #include <stack>
-#include <algorithm>
 //#include <initializer_list>
 //using namespace std;
 
@@ -30,6 +30,11 @@ class Matrix {
     int broj_kolona;
     std::stack<int> indeksi_redova;
     public:
+    typename Lista<Tip>::Const_Iterator Begin() const { return mat.Begin(); }
+    typename Lista<Tip>::Const_Iterator End() const { return mat.End(); }
+    typename Lista<Tip>::Iterator Begin() { return mat.Begin(); }
+    typename Lista<Tip>::Iterator End() { return mat.End(); }
+
     //konstruktor bez parametara
     Matrix() {}
 
@@ -38,76 +43,24 @@ class Matrix {
     //nego samo u pomocne varijable broj_redova i broj_kolona
     Matrix(int redovi, int kolone): broj_redova(redovi), broj_kolona(kolone) {}
 
-    Matrix(int redovi, int kolone, vektor<Tip> elementi): broj_redova(redovi), broj_kolona(kolone) {
+    Matrix(int redovi, int kolone, vektor<Tip> elementi);
 
-        sort(elementi.begin(), elementi.end(), [](podaci<Tip> a, podaci<Tip> b) {return a.first.first < b.first.first;});
+    Matrix(const Matrix<Tip> &kopija);
 
-        auto it1 = elementi.begin();
-        auto koordinate = it1->first;
+    Matrix(Matrix<Tip> &&kopija);
 
+    Matrix<Tip>& operator=(const Matrix<Tip> &rhs);
 
-        std::pair<int, Tip> unos;
-        unos.first = koordinate.second;
-        auto vrijednost = it1->second;
-        unos.second = vrijednost;
+    Matrix<Tip>& operator=(Matrix<Tip> &&rhs);
 
-        std::pair<int, Lista<std::pair<int,Tip>>> clan;
-        clan.first = koordinate.first;
-        clan.second.Push_Back(unos);
+    void ispisi();
 
-        indeksi_redova.push(clan.first);
-
-        it1++;
-        bool isti(false);
-        for(auto i(it1); i!=elementi.end(); i++){
-
-            auto koordinate2 = i->first;
-            int pomRed = koordinate2.first;
-            auto vrijednost = i->second;
-
-            std::pair<int, Tip> unos2;
-            unos2.first = koordinate2.second;
-            unos2.second = vrijednost;
-
-            if(pomRed != indeksi_redova.top()){
-                if(isti){
-                    mat.Push_Back(clan);
-                    clan.second.Clear();
-                    clan.first = pomRed;
-                    isti = false;
-                }
-                std::pair<int, Lista<std::pair<int,Tip>>> clan2;
-                clan2.first = pomRed;
-                clan2.second.Push_Back(unos2);
-                mat.Push_Back(clan2);
-                indeksi_redova.push(pomRed);
-            }
-            else{
-                clan.second.Push_Back(unos2);
-                isti = true;
-            }
-        }
-    }
-    void ispisi() {
-        /*std::pair<int,int> sp = std::make_pair(10,10);
-        Lista<std::pair<int,int>> s;
-        s.Push_Back(sp);
-        Lista<std::pair<int,int>>::Iterator it;
-        it = s.Begin();
-        std::cout<<(*it).first;*/
-        typename matrix<Tip>::Iterator it;
-        for(it = mat.Begin(); it != mat.End(); it++){
-            std::cout<<(*it).first<<',';
-            for(auto jt = (*it).second.Begin(); jt != (*it).second.End(); jt++){
-                std::cout<<(*jt).first<<'-'<<(*jt).second<<' ';
-            }
-            std::cout<<std::endl;
-        }
-
-    }
+    template <typename tip>
+    friend Matrix<tip>& f(Matrix<tip> &v);
 };
 
 
+#include "optimizedMatrix.cpp"
 
 
-#endif //OPTIMIZEDMATRIX.H
+#endif //OPTIMIZEDMATRIX_H
