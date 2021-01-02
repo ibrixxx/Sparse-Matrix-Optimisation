@@ -6,7 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <stack>
-//#include <initializer_list>
+#include <cmath>
 //using namespace std;
 
 
@@ -56,7 +56,11 @@ class Matrix {
     void ispisi();
 
     template <typename tip>
-    friend Matrix<tip>& f(Matrix<tip> &v);
+    friend Matrix<tip> operator+(Matrix<tip> m1, Matrix<tip> m2);
+
+    template <typename tip>
+    friend Matrix<tip>& operator-(const Matrix<tip> &m1, const Matrix<tip>& m2);
+
 };
 
 
