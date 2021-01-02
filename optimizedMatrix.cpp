@@ -108,4 +108,107 @@ void Matrix<Tip>::ispisi() {
 }
 
 
+template <typename tip>
+Matrix<tip> operator+(Matrix<tip> m1, Matrix<tip> m2) {
+        if(m1.broj_redova != m2.broj_redova && m1.broj_kolona != m2.broj_kolona)
+            throw "matrice se ne mogu sabrati!";
+        Matrix<tip> rez;
+        rez.broj_redova = m1.broj_redova;
+        rez.broj_kolona = m1.broj_kolona;
+        auto it1 = m1.mat.Begin();
+        auto it2 = m2.mat.Begin();
+        while(it1 != m1.mat.End() && it2 != m2.mat.End()){
+
+            std::pair<int, Lista<std::pair<int, tip>>> unos;
+            if((*it1).first == (*it2).first){
+                auto jt1 = (*it1).second.Begin();
+                auto jt2 = (*it2).second.Begin();
+
+                Lista<std::pair<int, tip>> red;
+                while(jt1 != (*it1).second.End() && jt2 != (*it2).second.End()){
+                    std::pair<int, tip> sadrzaj;
+                    if((*jt1).first == (*jt2).first) {
+                        sadrzaj.first = (*jt1).first;
+                        sadrzaj.second = (*jt1).second + (*jt2).second;
+                        jt1++; jt2++;
+                    }
+                    else if((*jt1).first < (*jt2).first){
+                        sadrzaj.first = (*jt1).first;
+                        sadrzaj.second = (*jt1).second;
+                        jt1++;
+                    }
+                    else{
+                        sadrzaj.first = (*jt2).first;
+                        sadrzaj.second = (*jt2).second;
+                        jt2++;
+                    }
+                    red.Push_Back(sadrzaj);
+                }
+                if(jt1 == (*it1).second.End()){
+                    while(jt2 != (*it2).second.End()){
+                        std::pair<int, tip> sadrzaj;
+                        sadrzaj.first = (*jt2).first;
+                        sadrzaj.second = (*jt2).second;
+                        red.Push_Back(sadrzaj);
+                        jt2++;
+                    }
+                }
+                if(jt2 == (*it2).second.End()){
+                    while(jt1 != (*it1).second.End()){
+                        std::pair<int, tip> sadrzaj;
+                        sadrzaj.first = (*jt1).first;
+                        sadrzaj.second = (*jt1).second;
+                        red.Push_Back(sadrzaj);
+                        jt1++;
+                    }
+                }
+                unos.first = (*it1).first;
+                unos.second = red;
+                rez.mat.Push_Back(unos);
+            }
+            else{
+                Lista<std::pair<int, tip>> red;
+                if((*it1).first < (*it2).first){
+                    unos.first = (*it1).first;
+                    auto jt1 = (*it1).second.Begin();
+                    while(jt1 != (*it1).second.End()){
+                        std::pair<int, tip> sadrzaj;
+                        sadrzaj.first = (*jt1).first;
+                        sadrzaj.second = (*jt1).second;
+                        red.Push_Back(sadrzaj);
+                        jt1++;
+                    }
+                }
+                else{
+                    unos.first = (*it2).first;
+                    auto jt2 = (*it2).second.Begin();
+                     while(jt2 != (*it2).second.End()){
+                        std::pair<int, tip> sadrzaj;
+                        sadrzaj.first = (*jt2).first;
+                        sadrzaj.second = (*jt2).second;
+                        red.Push_Back(sadrzaj);
+                        jt2++;
+                    }
+                }
+                unos.second = red;
+                rez.mat.Push_Back(unos);
+            }
+        it1++; it2++;
+        }
+        if(it1 == m1.mat.End()){
+            while(it2 != m2.mat.End()){
+                rez.mat.Push_Back(*it2);
+                it2++;
+            }
+        }
+        if(it2 == m2.mat.End()){
+            while(it1 != m1.mat.End()){
+                rez.mat.Push_Back(*it1);
+                it1++;
+            }
+        }
+        return rez;
+}
+
+
 #endif //OPTIMIZEDMATRIX_CPP
