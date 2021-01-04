@@ -3,7 +3,6 @@
 
 template <typename Tip>
 class Lista {
-
   struct Cvor {
      Tip element;
      Cvor *prethodni, *sljedeci;
@@ -31,6 +30,7 @@ class Lista {
     bool friend operator==(Const_Iterator it1, Const_Iterator it2) { return it1.pok == it2.pok; }
     bool friend operator!=(Const_Iterator it1, Const_Iterator it2) { return !(it1==it2); }
     friend class Lista<Tip>;
+
   };
 
   class Iterator : public Const_Iterator {
@@ -41,7 +41,20 @@ class Lista {
     Iterator operator++(int) { Iterator za_vracanje(*this); this->pok = this->pok->sljedeci; return za_vracanje; }
     Iterator operator--() { this->pok = this->pok->prethodni; return *this; }
     Iterator operator--(int) { Iterator za_vracanje(*this); this->pok = this->pok->prethodni; return za_vracanje; }
+  };
 
+  class Reverse_Iterator {
+    Cvor* pok;
+    public:
+    Reverse_Iterator(Cvor *cvor = nullptr):pok(cvor) {}
+    Tip operator*() { return pok->element; }
+    Reverse_Iterator operator--() { pok = pok->sljedeci; return *this; }
+    Reverse_Iterator operator--(int) { Reverse_Iterator za_vracanje(*this); pok = pok->sljedeci; return za_vracanje; }
+    Reverse_Iterator operator++() { pok = pok->prethodni; return *this; }
+    Reverse_Iterator operator++(int) { Reverse_Iterator za_vracanje(*this); pok = pok->prethodni; return za_vracanje; }
+    bool friend operator==(Reverse_Iterator it1, Reverse_Iterator it2) { return it1.pok == it2.pok; }
+    bool friend operator!=(Reverse_Iterator it1, Reverse_Iterator it2) { return !(it1==it2); }
+    friend class Lista<Tip>;
   };
 
   Lista() { init(); }
@@ -56,6 +69,8 @@ class Lista {
   Const_Iterator End() const { return rep; }
   Iterator Begin() { return glava->sljedeci; }
   Iterator End() { return rep; }
+  Reverse_Iterator RBegin() {return rep->prethodni;}
+  Reverse_Iterator REnd() {return glava;}
 
   Iterator Insert(Iterator pozicija, const Tip vrijednost);
   void Push_Back(const Tip vrijednost) { Insert(End(),vrijednost); }
@@ -67,6 +82,11 @@ class Lista {
 
   bool Empty() const { return broj_elemenata == 0; }
   void Clear() { while(!Empty()) PopFront(); }
+  Lista<Tip>& operator+=(const Lista<Tip> &l) {*this = *this + l; return *this;}
+  Lista<Tip>& operator+=(Lista<Tip> &&rhs) {rep->prethodni->slijedeci = rhs.glava->slijedeci; rep = rhs.rep; broj_elemenata += rhs.broj_elemenata;
+  rhs.glava = nullptr; rhs.rep = nullptr; rhs.broj_elemenata = 0; return *this;}
+  template <typename tip>
+  friend Lista<tip>& operator+(Lista<tip> &l1, const Lista<tip> &l2);
 };
 
 #include "lista.cpp"
