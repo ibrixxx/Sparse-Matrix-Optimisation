@@ -57,10 +57,17 @@ Lista<Tip>& Lista<Tip>::operator=(const Lista<Tip> &rhs) {
 
 template <typename Tip>
 Lista<Tip>& Lista<Tip>::operator=(Lista<Tip> &&rhs) {
-  swap(glava,rhs.glava);
-  swap(rep,rhs.rep);
+  std::swap(glava,rhs.glava);
+  std::swap(rep,rhs.rep);
   broj_elemenata = rhs.broj_elemenata;
   return *this;
+}
+
+template <typename tip>
+Lista<tip>& operator+(Lista<tip> &l1, const Lista<tip> &l2) {
+    for(auto it(l2.Begin()); it != l2.End(); it++)
+        l1.Push_Back(*it);
+    return l1;
 }
 
 #endif // LISTA_CPP
