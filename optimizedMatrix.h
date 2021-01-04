@@ -9,7 +9,6 @@
 #include <cmath>
 //using namespace std;
 
-
 //Korištenje aliasa "matrix" kako bi se izbjeglo pisanje velike konstrukcije koja čuva matricu
 //matrica se čuva u listi parova gdje je prvi član para index reda, a drugi član para je lista
 //parova čiji je prvi član para kolona elementa, a drugi generička vrijednost elementa matrice
@@ -28,7 +27,6 @@ class Matrix {
     matrix<Tip> mat;
     int broj_redova;
     int broj_kolona;
-    std::stack<int> indeksi_redova;
     public:
     typename Lista<Tip>::Const_Iterator Begin() const { return mat.Begin(); }
     typename Lista<Tip>::Const_Iterator End() const { return mat.End(); }
@@ -55,11 +53,13 @@ class Matrix {
 
     void ispisi();
 
+    Matrix<Tip> transponovano();
+
     template <typename tip>
     friend Matrix<tip> operator+(Matrix<tip> m1, Matrix<tip> m2);
 
     template <typename tip>
-    friend Matrix<tip>& operator-(const Matrix<tip> &m1, const Matrix<tip>& m2);
+    friend Matrix<tip> operator-(Matrix<tip> m1, Matrix<tip> m2);
 
 };
 
