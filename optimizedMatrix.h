@@ -61,6 +61,8 @@ class Matrix {
     template <typename tip>
     friend Matrix<tip> operator-(Matrix<tip> m1, Matrix<tip> m2);
 
+    template <typename tip>
+    friend Matrix<tip> operator%(Matrix<tip> m1, Matrix<tip> m2);
 };
 
 
