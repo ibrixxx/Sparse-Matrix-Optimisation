@@ -6,8 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <stack>
-#include <cmath>
-//using namespace std;
+//#include <cmath>
 
 //Korištenje aliasa "matrix" kako bi se izbjeglo pisanje velike konstrukcije koja čuva matricu
 //matrica se čuva u listi parova gdje je prvi član para index reda, a drugi član para je lista
@@ -24,45 +23,46 @@ using podaci = std::pair<std::pair<int, int>, Tip>;
 
 template <typename Tip>
 class Matrix {
+
     matrix<Tip> mat;
     int broj_redova;
     int broj_kolona;
+
+    Matrix<Tip>& jedinicna();
+
     public:
+
     typename Lista<Tip>::Const_Iterator Begin() const { return mat.Begin(); }
     typename Lista<Tip>::Const_Iterator End() const { return mat.End(); }
     typename Lista<Tip>::Iterator Begin() { return mat.Begin(); }
     typename Lista<Tip>::Iterator End() { return mat.End(); }
 
-    //konstruktor bez parametara
     Matrix() {}
-
-    //konstruktor sa dva parametra koji daju broj redova i kolona matrice
-    //pošto su svi elementi jednaki nuli, ne pamtimo ih u privatni atrubut mat
-    //nego samo u pomocne varijable broj_redova i broj_kolona
     Matrix(int redovi, int kolone): broj_redova(redovi), broj_kolona(kolone) {}
-
     Matrix(int redovi, int kolone, vektor<Tip> elementi);
 
-    Matrix(const Matrix<Tip> &kopija);
+    ~Matrix() {}
 
+    Matrix(const Matrix<Tip> &kopija);
     Matrix(Matrix<Tip> &&kopija);
 
     Matrix<Tip>& operator=(const Matrix<Tip> &rhs);
-
     Matrix<Tip>& operator=(Matrix<Tip> &&rhs);
 
     void ispisi();
 
-    Matrix<Tip> transponovano();
+    Matrix<Tip>& transponovano();
+
+    Matrix<Tip>& powerOf(unsigned int n);
 
     template <typename tip>
-    friend Matrix<tip> operator+(Matrix<tip> m1, Matrix<tip> m2);
+    friend Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2);
 
     template <typename tip>
-    friend Matrix<tip> operator-(Matrix<tip> m1, Matrix<tip> m2);
+    friend Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2);
 
     template <typename tip>
-    friend Matrix<tip> operator%(Matrix<tip> m1, Matrix<tip> m2);
+    friend Matrix<tip>& operator%(Matrix<tip> &m1, Matrix<tip> &m2);
 };
 
 
