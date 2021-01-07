@@ -17,14 +17,14 @@ Matrix<Tip>::Matrix(int redovi, int kolone, vektor<Tip> elementi): broj_redova(r
         auto koordinate = it1->first;
 
         std::pair<int, Tip> unos;
-        if(koordinate.second < 0 || koordinate.second >= kolone)
-            throw "pogrešno unesena kolona!";
+        //if(koordinate.second < 0 || koordinate.second >= kolone)
+        //    throw "pogrešno unesena kolona!";
         unos.first = koordinate.second;
         unos.second = it1->second;
 
         std::pair<int, Lista<std::pair<int,Tip>>> clan;
-        if(koordinate.first < 0 || koordinate.first >= redovi)
-            throw "pogrešno unesen red!";
+        //if(koordinate.first < 0 || koordinate.first >= redovi)
+        //    throw "pogrešno unesen red!";
         clan.first = koordinate.first;
         clan.second.Push_Back(unos);
 
@@ -40,8 +40,8 @@ Matrix<Tip>::Matrix(int redovi, int kolone, vektor<Tip> elementi): broj_redova(r
 
             if(koordinate.first < 0 || koordinate.first >= redovi)
                 throw "pogrešno unesen red!";
-            if(koordinate.second < 0 || koordinate.second >= kolone)
-                throw "pogrešno unesena kolona!";
+            //if(koordinate.second < 0 || koordinate.second >= kolone)
+            //    throw "pogrešno unesena kolona!";
 
             int pomRed = koordinate.first;
             unos.first = koordinate.second;
@@ -397,6 +397,7 @@ Matrix<tip>& operator%(Matrix<tip> &m1, Matrix<tip> &m2) {
             for(auto jt = m1.mat.Begin(); jt != m1.mat.End(); jt++){
 
                 produkt.first.first = (*jt).first;
+                produkt.first.second = (*it).first;
                 auto it1 = (*it).second.Begin();
                 auto jt1 = (*jt).second.Begin();
                 int zbir(0);
@@ -406,7 +407,6 @@ Matrix<tip>& operator%(Matrix<tip> &m1, Matrix<tip> &m2) {
                     else if((*jt1).first < (*it1).first)
                         jt1++;
                     else{
-                        produkt.first.second = (*jt1).first;
                         zbir += (*jt1).second * (*it1).second;
                         it1++; jt1++;
                     }
