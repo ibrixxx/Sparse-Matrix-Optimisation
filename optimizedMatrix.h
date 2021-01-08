@@ -37,6 +37,7 @@ class Matrix {
     typename Lista<Tip>::Iterator Begin() { return mat.Begin(); }
     typename Lista<Tip>::Iterator End() { return mat.End(); }
 
+
     Matrix() {}
     Matrix(int redovi, int kolone): broj_redova(redovi), broj_kolona(kolone) {}
     Matrix(int redovi, int kolone, vektor<Tip> elementi);
@@ -63,6 +64,12 @@ class Matrix {
 
     template <typename tip>
     friend Matrix<tip>& operator%(Matrix<tip> &m1, Matrix<tip> &m2);
+
+    template <typename tip, typename tip2>
+    friend Matrix<tip>& operator%(Matrix<tip> &m1, tip2 skalar);
+
+    template <typename tip, typename tip2>
+    friend Matrix<tip>& operator%(tip2 skalar, Matrix<tip> &m1);
 };
 
 
