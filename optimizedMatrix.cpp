@@ -17,14 +17,14 @@ Matrix<Tip>::Matrix(int redovi, int kolone, vektor<Tip> elementi): broj_redova(r
         auto koordinate = it1->first;
 
         std::pair<int, Tip> unos;
-        //if(koordinate.second < 0 || koordinate.second >= kolone)
-        //    throw "pogrešno unesena kolona!";
+        if(koordinate.second < 0 || koordinate.second >= kolone)
+            throw "pogrešno unesena kolona!";
         unos.first = koordinate.second;
         unos.second = it1->second;
 
         std::pair<int, Lista<std::pair<int,Tip>>> clan;
-        //if(koordinate.first < 0 || koordinate.first >= redovi)
-        //    throw "pogrešno unesen red!";
+        if(koordinate.first < 0 || koordinate.first >= redovi)
+            throw "pogrešno unesen red!";
         clan.first = koordinate.first;
         clan.second.Push_Back(unos);
 
@@ -40,8 +40,8 @@ Matrix<Tip>::Matrix(int redovi, int kolone, vektor<Tip> elementi): broj_redova(r
 
             if(koordinate.first < 0 || koordinate.first >= redovi)
                 throw "pogrešno unesen red!";
-            //if(koordinate.second < 0 || koordinate.second >= kolone)
-            //    throw "pogrešno unesena kolona!";
+            if(koordinate.second < 0 || koordinate.second >= kolone)
+                throw "pogrešno unesena kolona!";
 
             int pomRed = koordinate.first;
             unos.first = koordinate.second;
@@ -136,6 +136,7 @@ void Matrix<Tip>::ispisi() {
 }
 
 
+
 template <typename tip>
 Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2) {
     try{
@@ -144,15 +145,15 @@ Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2) {
         Matrix<tip>* rez = new Matrix<tip>(m1.broj_redova, m2.broj_kolona);
         rez->broj_redova = m1.broj_redova;
         rez->broj_kolona = m1.broj_kolona;
-        auto it1 = m1.mat.Begin();
-        auto it2 = m2.mat.Begin();
+        typename matrix<tip>::Iterator it1 = m1.mat.Begin();
+        typename matrix<tip>::Iterator it2 = m2.mat.Begin();
         while(it1 != m1.mat.End() && it2 != m2.mat.End()){
 
             std::pair<int, Lista<std::pair<int, tip>>> unos;
             if((*it1).first == (*it2).first){
-                auto jt1 = (*it1).second.Begin();
-                auto jt2 = (*it2).second.Begin();
-
+                typename Lista<std::pair<int,tip>>::Iterator jt1 = (*it1).second.Begin();
+                typename Lista<std::pair<int,tip>>::Iterator jt2 = (*it2).second.Begin();
+                bool nijeNula(false);
                 Lista<std::pair<int, tip>> red;
                 std::pair<int, tip> sadrzaj;
                 while(jt1 != (*it1).second.End() && jt2 != (*it2).second.End()){
@@ -172,8 +173,10 @@ Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2) {
                         sadrzaj.second = (*jt2).second;
                         jt2++;
                     }
-                    if(sadrzaj.second)
+                    if(sadrzaj.second){
                         red.Push_Back(sadrzaj);
+                        nijeNula = true;
+                    }
                 }
                 if(jt1 == (*it1).second.End()){
                     while(jt2 != (*it2).second.End()){
@@ -191,9 +194,11 @@ Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2) {
                         jt1++;
                     }
                 }
-                unos.first = (*it1).first;
-                unos.second = red;
-                rez->mat.Push_Back(unos);
+                if(nijeNula){
+                    unos.first = (*it1).first;
+                    unos.second = red;
+                    rez->mat.Push_Back(unos);
+                }
                 it1++; it2++;
             }
             else{
@@ -251,7 +256,7 @@ template <typename tip>
 Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
     try{
         if(m1.broj_redova != m2.broj_redova && m1.broj_kolona != m2.broj_kolona)
-            throw "matrice se ne mogu sabrati!";
+            throw "matrice se ne mogu oduzeti!";
         Matrix<tip>* rez = new Matrix<tip>(m1.broj_redova, m2.broj_kolona);
         rez->broj_redova = m1.broj_redova;
         rez->broj_kolona = m1.broj_kolona;
@@ -263,7 +268,7 @@ Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
             if((*it1).first == (*it2).first){
                 auto jt1 = (*it1).second.Begin();
                 auto jt2 = (*it2).second.Begin();
-
+                bool nijeNula(false);
                 Lista<std::pair<int, tip>> red;
                 std::pair<int, tip> sadrzaj;
                 while(jt1 != (*it1).second.End() && jt2 != (*it2).second.End()){
@@ -283,8 +288,10 @@ Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
                         sadrzaj.second = -(*jt2).second;
                         jt2++;
                     }
-                    if(sadrzaj.second)
+                    if(sadrzaj.second){
                         red.Push_Back(sadrzaj);
+                        nijeNula = true;
+                    }
                 }
                 if(jt1 == (*it1).second.End()){
                     while(jt2 != (*it2).second.End()){
@@ -302,9 +309,11 @@ Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
                         jt1++;
                     }
                 }
-                unos.first = (*it1).first;
-                unos.second = red;
-                rez->mat.Push_Back(unos);
+                if(nijeNula){
+                    unos.first = (*it1).first;
+                    unos.second = red;
+                    rez->mat.Push_Back(unos);
+                }
                 it1++; it2++;
             }
             else{
@@ -366,19 +375,24 @@ Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
 
 template <typename Tip>
 Matrix<Tip>& Matrix<Tip>::transponovano() {
-    vektor<Tip> za_ubacit;
-    typename matrix<Tip>::Iterator it;
-    for(it = mat.Begin(); it != mat.End(); it++){
-        std::pair<std::pair<int, int>, Tip> pom;
-        pom.first.second = (*it).first;
-        for(auto jt = (*it).second.Begin(); jt != (*it).second.End(); jt++){
-            pom.first.first = (*jt).first;
-            pom.second = (*jt).second;
-            za_ubacit.push_back(pom);
+    try{
+        vektor<Tip> za_ubacit;
+        typename matrix<Tip>::Iterator it;
+        for(it = mat.Begin(); it != mat.End(); it++){
+            std::pair<std::pair<int, int>, Tip> pom;
+            pom.first.second = (*it).first;
+            for(auto jt = (*it).second.Begin(); jt != (*it).second.End(); jt++){
+                pom.first.first = (*jt).first;
+                pom.second = (*jt).second;
+                za_ubacit.push_back(pom);
+            }
         }
+        Matrix<Tip>* rezultat = new Matrix<Tip>(broj_kolona, broj_redova, za_ubacit);
+        return *rezultat;
     }
-    Matrix<Tip>* rezultat = new Matrix<Tip>(broj_kolona, broj_redova, za_ubacit);
-    return *rezultat;
+    catch(...){
+        std::cout<<"nema memorije!"<<std::endl;
+    }
 }
 
 
@@ -422,6 +436,21 @@ Matrix<tip>& operator%(Matrix<tip> &m1, Matrix<tip> &m2) {
     catch(const char* poruka){
         std::cout<<poruka<<std::endl;
     }
+}
+
+
+template <typename tip, typename tip2>
+Matrix<tip>& operator%(Matrix<tip> &m1, tip2 skalar) {
+    auto it = m1.mat.Begin();
+    for(it; it != m1.mat.End(); it++)
+        for(auto jt = (*it).second.Begin(); jt != (*it).second.End(); jt++)
+            (*jt).second *= skalar;
+    return m1;
+}
+
+template <typename tip, typename tip2>
+Matrix<tip>& operator%(tip2 skalar, Matrix<tip> &m1) {
+    return m1%skalar;
 }
 
 
