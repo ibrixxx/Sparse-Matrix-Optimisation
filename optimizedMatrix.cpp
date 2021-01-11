@@ -153,7 +153,6 @@ Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2) {
             if((*it1).first == (*it2).first){
                 auto jt1 = (*it1).second.Begin();
                 auto jt2 = (*it2).second.Begin();
-                //bool nijeNula(false);
                 Lista<std::pair<int, tip>> red;
                 std::pair<int, tip> sadrzaj;
                 while(jt1 != (*it1).second.End() && jt2 != (*it2).second.End()){
@@ -175,7 +174,6 @@ Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2) {
                     }
                     if(sadrzaj.second){
                         red.Push_Back(sadrzaj);
-                        //nijeNula = true;
                     }
                 }
                 if(jt1 == (*it1).second.End()){
@@ -268,7 +266,6 @@ Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
             if((*it1).first == (*it2).first){
                 auto jt1 = (*it1).second.Begin();
                 auto jt2 = (*it2).second.Begin();
-                //bool nijeNula(false);
                 Lista<std::pair<int, tip>> red;
                 std::pair<int, tip> sadrzaj;
                 while(jt1 != (*it1).second.End() && jt2 != (*it2).second.End()){
@@ -290,7 +287,6 @@ Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
                     }
                     if(sadrzaj.second){
                         red.Push_Back(sadrzaj);
-                        //nijeNula = true;
                     }
                 }
                 if(jt1 == (*it1).second.End()){
@@ -483,8 +479,8 @@ Matrix<Tip>& Matrix<Tip>::powerOf(unsigned int n) {
         if(n == 1)
             return *this;
         if(n % 2 == 0){
-            *this = (*this).powerOf(n/2);
-            return *this % *this;
+            Matrix<Tip> pom = (*this).powerOf(n/2);
+            return pom % pom;
         }
         else{
             Matrix<Tip> pom = (*this).powerOf(n/2);
