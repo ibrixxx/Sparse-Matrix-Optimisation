@@ -145,15 +145,15 @@ Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2) {
         Matrix<tip>* rez = new Matrix<tip>(m1.broj_redova, m2.broj_kolona);
         rez->broj_redova = m1.broj_redova;
         rez->broj_kolona = m1.broj_kolona;
-        typename matrix<tip>::Iterator it1 = m1.mat.Begin();
-        typename matrix<tip>::Iterator it2 = m2.mat.Begin();
+        auto it1 = m1.mat.Begin();
+        auto it2 = m2.mat.Begin();
         while(it1 != m1.mat.End() && it2 != m2.mat.End()){
 
             std::pair<int, Lista<std::pair<int, tip>>> unos;
             if((*it1).first == (*it2).first){
-                typename Lista<std::pair<int,tip>>::Iterator jt1 = (*it1).second.Begin();
-                typename Lista<std::pair<int,tip>>::Iterator jt2 = (*it2).second.Begin();
-                bool nijeNula(false);
+                auto jt1 = (*it1).second.Begin();
+                auto jt2 = (*it2).second.Begin();
+                //bool nijeNula(false);
                 Lista<std::pair<int, tip>> red;
                 std::pair<int, tip> sadrzaj;
                 while(jt1 != (*it1).second.End() && jt2 != (*it2).second.End()){
@@ -163,19 +163,19 @@ Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2) {
                         sadrzaj.second = (*jt1).second + (*jt2).second;
                         jt1++; jt2++;
                     }
-                    if((*jt1).first < (*jt2).first){
+                    else if((*jt1).first < (*jt2).first){
                         sadrzaj.first = (*jt1).first;
                         sadrzaj.second = (*jt1).second;
                         jt1++;
                     }
-                    if((*jt1).first > (*jt2).first){
+                    else{
                         sadrzaj.first = (*jt2).first;
                         sadrzaj.second = (*jt2).second;
                         jt2++;
                     }
                     if(sadrzaj.second){
                         red.Push_Back(sadrzaj);
-                        nijeNula = true;
+                        //nijeNula = true;
                     }
                 }
                 if(jt1 == (*it1).second.End()){
@@ -194,7 +194,7 @@ Matrix<tip>& operator+(Matrix<tip> &m1, Matrix<tip> &m2) {
                         jt1++;
                     }
                 }
-                if(nijeNula){
+                if(!red.Empty()){
                     unos.first = (*it1).first;
                     unos.second = red;
                     rez->mat.Push_Back(unos);
@@ -268,7 +268,7 @@ Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
             if((*it1).first == (*it2).first){
                 auto jt1 = (*it1).second.Begin();
                 auto jt2 = (*it2).second.Begin();
-                bool nijeNula(false);
+                //bool nijeNula(false);
                 Lista<std::pair<int, tip>> red;
                 std::pair<int, tip> sadrzaj;
                 while(jt1 != (*it1).second.End() && jt2 != (*it2).second.End()){
@@ -278,19 +278,19 @@ Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
                         sadrzaj.second = (*jt1).second - (*jt2).second;
                         jt1++; jt2++;
                     }
-                    if((*jt1).first < (*jt2).first){
+                    else if((*jt1).first < (*jt2).first){
                         sadrzaj.first = (*jt1).first;
                         sadrzaj.second = (*jt1).second;
                         jt1++;
                     }
-                    if((*jt1).first > (*jt2).first){
+                    else{
                         sadrzaj.first = (*jt2).first;
                         sadrzaj.second = -(*jt2).second;
                         jt2++;
                     }
                     if(sadrzaj.second){
                         red.Push_Back(sadrzaj);
-                        nijeNula = true;
+                        //nijeNula = true;
                     }
                 }
                 if(jt1 == (*it1).second.End()){
@@ -309,7 +309,7 @@ Matrix<tip>& operator-(Matrix<tip> &m1, Matrix<tip> &m2) {
                         jt1++;
                     }
                 }
-                if(nijeNula){
+                if(!red.Empty()){
                     unos.first = (*it1).first;
                     unos.second = red;
                     rez->mat.Push_Back(unos);
