@@ -482,10 +482,14 @@ Matrix<Tip>& Matrix<Tip>::powerOf(unsigned int n) {
             return this->jedinicna();
         if(n == 1)
             return *this;
-        if(n % 2 == 0)
-            return (*this).powerOf(n/2) % (*this).powerOf(n/2);
-        else
-            return (*this) % (*this).powerOf(n/2) % (*this).powerOf(n/2);
+        if(n % 2 == 0){
+            *this = (*this).powerOf(n/2);
+            return *this % *this;
+        }
+        else{
+            Matrix<Tip> pom = (*this).powerOf(n/2);
+            return (*this) % pom % pom;
+        }
 
     }
     catch(const char* poruka){
